@@ -7,6 +7,11 @@
                 {{ session('success') }}
             </div>
         @endif
+        @if (session('error'))
+            <div class="alert alert-error">
+                {{ session('error') }}
+            </div>
+        @endif
         <form method="POST" action="{{ route('jobs.update', $job->id) }}">
             @csrf
             @method('PUT')
@@ -52,7 +57,7 @@
                     @endforeach
                 </select>
             </div>
-
+            <br>
             <!-- Mentés -->
             <button type="submit" class="btn btn-primary">Mentés</button>
         </form>

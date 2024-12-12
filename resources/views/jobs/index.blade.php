@@ -7,6 +7,7 @@
                 {{ session('success') }}
             </div>
         @endif
+        <h1>Munkák</h1>
         <form method="GET" action="{{ route('jobs.index') }}">
             <div class="mb-3">
                 <label for="status" class="form-label">Szűrés státusz szerint</label>

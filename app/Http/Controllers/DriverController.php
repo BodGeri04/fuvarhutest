@@ -43,7 +43,7 @@ class DriverController extends Controller
             'password' => Hash::make($request->password),
             'is_admin' => $request->has('is_admin') ? true : false,
         ]);
-        return redirect()->route('drivers.create')->with('success', 'Sikeresen létrehozva!');
+        return redirect()->route('jobs.index')->with('success', 'Sikeresen létrehozva!');
     }
 
     /**

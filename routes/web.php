@@ -25,4 +25,4 @@ Route::middleware(['auth', 'driver'])->group(function () {
     Route::get('djobs/{id}/edit', [DriverController::class, 'edit'])->name('drivers.edit'); // Státusz módosítása
     Route::put('djobs/{id}', [DriverController::class, 'update'])->name('drivers.update'); // Státusz frissítése
 });
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Driver;
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
@@ -18,6 +20,7 @@ class LoginController extends Controller
     |
     */
 
+    
     use AuthenticatesUsers;
 
     /**
@@ -25,7 +28,24 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected function authenticated(Request $request, $user)
+    {
+        // Driver rekordja a 'driver_id' alapján
+        $driver = Driver::where('id', $user->id)->first();
+
+        // Ha nincs hozzárendelt driver, akkor hibaüzenet
+        if (!$driver) {
+            return redirect()->route('login')->withErrors(['msg' => 'Nincs hozzárendelt fuvarozó']);
+        }
+
+        // Ha admin felhasználó (is_admin = 1), /jobs oldalra
+        if ($driver->is_admin) {
+            return redirect()->route('jobs.index');
+        }
+
+        // Ha fuvarozó felhasználó (is_admin = 0), /djobs oldalra
+        return redirect()->route('drivers.index');
+    }
 
     /**
      * Create a new controller instance.
@@ -37,4 +57,5 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
         $this->middleware('auth')->only('logout');
     }
+
 }
