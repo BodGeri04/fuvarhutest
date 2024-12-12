@@ -14,4 +14,8 @@ class Driver extends Model
     {
         return $this->hasMany(Job::class);
     }
+    public function isAdmin()
+    {
+        return $this->is_admin;
+    }
 }
