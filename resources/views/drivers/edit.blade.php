@@ -18,6 +18,7 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Státusz Módosítása</button>
+        <a type="button" href="{{ url()->previous() }}" class="btn btn-secondary">Vissza</a>
     </form>
 </div>
 @endsection

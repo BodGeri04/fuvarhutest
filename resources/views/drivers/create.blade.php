@@ -63,6 +63,7 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Fuvarozó Létrehozása</button>
+        <a type="button" href="{{ url()->previous() }}" class="btn btn-secondary">Vissza</a>
     </form>
 </div>
 @endsection
