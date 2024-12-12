@@ -22,7 +22,10 @@ class Driver extends Authenticatable
     {
         return $this->is_admin;
     }
-
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
     protected $fillable = [
         'name',
         'email',

@@ -7,14 +7,14 @@
                 {{ session('success') }}
             </div>
         @endif
-        <table>
+        <table class="table">
             <thead>
                 <tr>
                     <th> ID</th>
                     <th> Kezdő cím</th>
                     <th> Cél cím </th>
-                    <th> Partner neve </th>
-                    <th> Partner telefonszáma</th>
+                    <th> Címzett neve </th>
+                    <th> Címzett telefonszáma</th>
                     <th> Státusz </th>
                     <th> Vezető ID </th>
                     <th></th>

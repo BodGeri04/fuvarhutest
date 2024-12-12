@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Driver;
+use App\Models\Job;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -13,7 +14,8 @@ class DriverController extends Controller
      */
     public function index()
     {
-        //
+        $jobs = Job::where('driver_id', auth()->id())->get();
+        return view('drivers.index', compact('jobs'));
     }
 
     /**
@@ -31,15 +33,15 @@ class DriverController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email'=> 'required|email|unique:drivers,email',
-            'password'=>'required|string|min:8',
+            'email' => 'required|email|unique:drivers,email',
+            'password' => 'required|string|min:8',
         ]);
 
         Driver::create([
-            'name'=>$request->name,
-            'email'=>$request->email,
-            'password'=>Hash::make($request->password),
-            'is_admin'=>$request->has('is_admin') ? true : false,
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'is_admin' => $request->has('is_admin') ? true : false,
         ]);
         return redirect()->route('drivers.create')->with('success', 'Sikeresen létrehozva!');
     }
@@ -57,7 +59,15 @@ class DriverController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $job = Job::findOrFail($id);
+        $driver = Driver::where('id', auth()->user()->id)->first();
+        
+        // Csak a saját munkáit módosíthatja
+        if ($job->driver_id !== $driver->id) {
+            return redirect()->route('drivers.index')->with('error', 'Nincs jogosultságod a munka módosításához.');
+        }
+
+        return view('drivers.edit', compact('job'));
     }
 
     /**
@@ -65,7 +75,24 @@ class DriverController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        // Validáljuk a státuszt
+        $validated = $request->validate([
+            'status' => 'required|in:assigned,in progress,completed,failed',
+        ]);
+
+        // Munkát keresünk és módosítjuk a státuszt
+        $job = Job::findOrFail($id);
+        $driver = Driver::where('id', auth()->user()->id)->first();
+        // Csak a saját munkáját módosíthatja
+        if ($job->driver_id !== $driver->id) {
+            return redirect()->route('drivers.index')->with('error', 'Nincs jogosultságod a munka módosításához.');
+        }
+
+        // Státusz módosítása
+        $job->status = $validated['status'];
+        $job->save();
+
+        return redirect()->route('drivers.index')->with('success', 'Munka státusza sikeresen frissítve!');
     }
 
     /**

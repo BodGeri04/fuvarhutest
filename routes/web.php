@@ -19,5 +19,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/jobs/create', [JobController::class, 'create'])->name('jobs.create');
     Route::post('/jobs', [JobController::class, 'store'])->name('jobs.store');
 });
-
+// Fuvarozói munkák
+Route::middleware(['auth', 'driver'])->group(function () {
+    Route::get('djobs', [DriverController::class, 'index'])->name('drivers.index'); // Munkák megtekintése
+    Route::get('djobs/{id}/edit', [DriverController::class, 'edit'])->name('drivers.edit'); // Státusz módosítása
+    Route::put('djobs/{id}', [DriverController::class, 'update'])->name('drivers.update'); // Státusz frissítése
+});
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
