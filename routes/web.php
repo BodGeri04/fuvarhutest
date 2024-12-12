@@ -5,7 +5,7 @@ use App\Http\Controllers\JobController;
 use Illuminate\Support\Facades\Route;
 
 
-Auth::routes();
+Auth::routes(['register'=>false]);
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/drivers/create', [DriverController::class, 'create'])->name('drivers.create');

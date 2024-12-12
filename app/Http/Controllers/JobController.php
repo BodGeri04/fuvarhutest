@@ -11,10 +11,18 @@ class JobController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $jobs = Job::all();
-        
+        // Ha az admin kér egy státuszt, akkor szűrjük a munkákat
+        $query = Job::query();
+
+        if ($request->has('status') && in_array($request->status, ['assigned', 'in progress', 'completed', 'failed'])) {
+            $query->where('status', $request->status);
+        }
+
+        // Alapértelmezett lista: minden munka
+        $jobs = $query->get();
+
         return view('jobs.index', compact('jobs'));
     }
 
@@ -40,7 +48,7 @@ class JobController extends Controller
             'recipient_phone' => 'required|string|max:15',
             'driver_id' => 'required|exists:drivers,id',
         ]);
-        $validated['status']='in progress';
+        $validated['status'] = 'in progress';
         // Létrehozzuk az új munkát
         Job::create($validated);
 

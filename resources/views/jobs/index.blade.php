@@ -7,6 +7,19 @@
                 {{ session('success') }}
             </div>
         @endif
+        <form method="GET" action="{{ route('jobs.index') }}">
+            <div class="mb-3">
+                <label for="status" class="form-label">Szűrés státusz szerint</label>
+                <select name="status" id="status" class="form-control" onchange="this.form.submit()">
+                    <option value="">-- Minden státusz --</option>
+                    <option value="assigned" {{ request('status') == 'assigned' ? 'selected' : '' }}>Kiosztva</option>
+                    <option value="in progress" {{ request('status') == 'in_progress' ? 'selected' : '' }}>Folyamatban
+                    </option>
+                    <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Elvégezve</option>
+                    <option value="failed" {{ request('status') == 'failed' ? 'selected' : '' }}>Sikertelen</option>
+                </select>
+            </div>
+        </form>
         <table class="table">
             <thead>
                 <tr>
