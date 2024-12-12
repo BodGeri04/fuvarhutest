@@ -31,7 +31,20 @@ class JobController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validáljuk az adatokat
+        $validated = $request->validate([
+            'starting_address' => 'required|string|max:255',
+            'destination_address' => 'required|string|max:255',
+            'recipient_name' => 'required|string|max:255',
+            'recipient_phone' => 'required|string|max:15',
+            'driver_id' => 'required|exists:drivers,id',
+        ]);
+        $validated['status']='in progress';
+        // Létrehozzuk az új munkát
+        Job::create($validated);
+
+        // Visszairányítjuk a felhasználót
+        return redirect()->route('jobs.index')->with('success', 'Munka sikeresen létrehozva!');
     }
 
     /**

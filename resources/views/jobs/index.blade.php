@@ -47,6 +47,7 @@
                 @endforeach
             </tbody>
         </table>
+        <a href="{{ url('/jobs/create') }}" class="btn btn-xs btn-success pull-right">Új hozzáadása</a>
     </div>
     <script>
         // Pop-up megerősítés a törlés előtt

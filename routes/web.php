@@ -15,6 +15,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('jobs', JobController::class);
     // Munka törlése
     Route::delete('/jobs/{job}', [JobController::class, 'destroy'])->name('jobs.destroy');
+    // Munka létrehozása
+    Route::get('/jobs/create', [JobController::class, 'create'])->name('jobs.create');
+    Route::post('/jobs', [JobController::class, 'store'])->name('jobs.store');
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
