@@ -40,6 +40,11 @@ return [
             'driver' => 'session',
             'provider' => 'drivers',
         ],
+        // Új driver guard
+        'driver' => [
+            'driver' => 'session',
+            'provider' => 'drivers',
+        ],
     ],
 
     /*
@@ -64,7 +69,7 @@ return [
             'model' => App\Models\Driver::class, // A Driver modelre mutat
         ],
     ],
-    
+
     // 'providers' => [
     //     'users' => [
     //         'driver' => 'eloquent',
