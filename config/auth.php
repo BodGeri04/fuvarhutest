@@ -61,7 +61,7 @@ return [
     'providers' => [
         'drivers' => [ // Új provider "drivers" néven
             'driver' => 'eloquent',
-            'model' => App\Models\Driver::class, // A Driver modelre mutasson
+            'model' => App\Models\Driver::class, // A Driver modelre mutat
         ],
     ],
     

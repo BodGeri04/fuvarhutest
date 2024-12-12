@@ -24,12 +24,12 @@
         </div>
         <div class="mb-3">
             <label for="password" class="form-label">Admin?</label>
-            <select required name="is_admin" data-plugin-selectOne class="form-control populate">
-                <option value='1'>
-                    Igen
-                </option>
+            <select required name="is_admin" data-plugin-selectOne class="form-control">
                 <option value='0'>
                     Nem
+                </option>
+                <option value='1'>
+                    Igen
                 </option>
             </select>
         </div>
