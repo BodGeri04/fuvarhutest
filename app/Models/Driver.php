@@ -10,6 +10,7 @@ class Driver extends Authenticatable
 {
     use HasFactory, Notifiable;
     
+    //kapcsolatok
     public function vehicle()
     {
         return $this->hasOne(Vehicle::class);
@@ -21,10 +22,6 @@ class Driver extends Authenticatable
     public function isAdmin()
     {
         return $this->is_admin;
-    }
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'user_id');
     }
     protected $fillable = [
         'name',

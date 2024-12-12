@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('destination_address');
             $table->string('recipient_name');
             $table->string('recipient_phone');
-            $table->enum('status', ['Assigned', 'In Progress', 'Completed', 'Failed'])->default('Assigned');
+            $table->enum('status', ['Assigned', 'In Progress', 'Completed', 'Failed'])->default('In Progress');
             $table->unsignedBigInteger('driver_id')->nullable();
             $table->foreign('driver_id')->references('id')->on('drivers')->onDelete('set null');
             $table->timestamps(); 

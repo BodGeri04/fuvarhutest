@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Job extends Model
 {
     use HasFactory;
- 
+    //kapcsolatok
     public function driver()
     {
         return $this->belongsTo(Driver::class);

@@ -9,10 +9,12 @@ use Tests\TestCase;
 
 class JobTest extends TestCase
 {
+    use RefreshDatabase;
+    
     /** @test */
     public function an_admin_can_create_a_job()
     {
-        // Létrehozunk egy admin felhasználót a drivers táblában
+        // Admin felhasználó létrehozása
         $admin = Driver::factory()->create(['is_admin' => 1]);
 
         // Bejelentkezünk az adminnal

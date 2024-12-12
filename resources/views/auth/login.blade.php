@@ -37,11 +37,6 @@
                             @enderror
                         </div>
 
-                        <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" id="remember" name="remember" {{ old('remember') ? 'checked' : '' }}>
-                            <label class="form-check-label" for="remember">{{ __('Emlékezz rám') }}</label>
-                        </div>
-
                         <button type="submit" class="btn btn-primary">{{ __('Bejelentkezés') }}</button>
                     </form>
                 </div>

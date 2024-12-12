@@ -14,6 +14,7 @@ class DriverController extends Controller
      */
     public function index()
     {
+        //A lényeg, hogy csak az adat menjen át, ami valóban a bejelentkezett fuvarosé
         $jobs = Job::where('driver_id', auth()->id())->get();
         return view('drivers.index', compact('jobs'));
     }
@@ -31,19 +32,24 @@ class DriverController extends Controller
      */
     public function store(Request $request)
     {
+        //validáció majd létrehozás a create-nél
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:drivers,email',
             'password' => 'required|string|min:8',
         ]);
-
-        Driver::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'is_admin' => $request->has('is_admin') ? true : false,
-        ]);
-        return redirect()->route('jobs.index')->with('success', 'Sikeresen létrehozva!');
+        //A feladat nem kérte, hogy lehessen kiválasztani admint, de én bele raktam
+        try {
+            Driver::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'is_admin' => $request->has('is_admin'),
+            ]);
+            return redirect()->route('jobs.index')->with('success', 'Sikeresen létrehozva!');
+        } catch (\Exception $e) {
+            return redirect()->route('jobs.index')->with('error', 'Hiba történt a létrehozás során.');
+        }
     }
 
     /**
@@ -60,8 +66,9 @@ class DriverController extends Controller
     public function edit(string $id)
     {
         $job = Job::findOrFail($id);
+        //Ez egy segéd, mivel nem users táblában vannak a felhasználók
         $driver = Driver::where('id', auth()->user()->id)->first();
-        
+
         // Csak a saját munkáit módosíthatja
         if ($job->driver_id !== $driver->id) {
             return redirect()->route('drivers.index')->with('error', 'Nincs jogosultságod a munka módosításához.');
@@ -82,17 +89,20 @@ class DriverController extends Controller
 
         // Munkát keresünk és módosítjuk a státuszt
         $job = Job::findOrFail($id);
+        //Segéd
         $driver = Driver::where('id', auth()->user()->id)->first();
         // Csak a saját munkáját módosíthatja
         if ($job->driver_id !== $driver->id) {
             return redirect()->route('drivers.index')->with('error', 'Nincs jogosultságod a munka módosításához.');
         }
 
-        // Státusz módosítása
-        $job->status = $validated['status'];
-        $job->save();
-
-        return redirect()->route('drivers.index')->with('success', 'Munka státusza sikeresen frissítve!');
+        try {
+            $job->status = $validated['status'];
+            $job->save();
+            return redirect()->route('drivers.index')->with('success', 'Munka státusza sikeresen frissítve!');
+        } catch (\Exception $e) {
+            return redirect()->route('drivers.index')->with('error', 'Hiba történt a státusz frissítése során.');
+        }
     }
 
     /**

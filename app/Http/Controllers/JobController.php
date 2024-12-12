@@ -20,7 +20,7 @@ class JobController extends Controller
             $query->where('status', $request->status);
         }
 
-        // Alapértelmezett lista: minden munka
+        // Alapértelmezett lista a minden munka
         $jobs = $query->get();
 
         return view('jobs.index', compact('jobs'));
@@ -31,8 +31,15 @@ class JobController extends Controller
      */
     public function create()
     {
-        $drivers = Driver::all(); // Fuvarozók listája a hozzárendeléshez
-        return view('jobs.create', compact('drivers'));
+        try {
+            $drivers = Driver::all(); // Fuvarozók listája a hozzárendeléshez
+            if ($drivers->isEmpty()) {
+                throw new \Exception('Nincsenek elérhető fuvarozók.');
+            }
+            return view('jobs.create', compact('drivers'));
+        } catch (\Exception $e) {
+            return redirect()->route('jobs.index')->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -40,6 +47,7 @@ class JobController extends Controller
      */
     public function store(Request $request)
     {
+
         // Validáljuk az adatokat
         $validated = $request->validate([
             'starting_address' => 'required|string|max:255',
@@ -48,12 +56,16 @@ class JobController extends Controller
             'recipient_phone' => 'required|string|max:15',
             'driver_id' => 'required|exists:drivers,id',
         ]);
-        $validated['status'] = 'in progress';
-        // Létrehozzuk az új munkát
-        Job::create($validated);
+        try {
+            $validated['status'] = 'in progress';
 
-        // Visszairányítjuk a felhasználót
-        return redirect()->route('jobs.index')->with('success', 'Munka sikeresen létrehozva!');
+            // Létrehozzuk az új munkát
+            Job::create($validated);
+
+            return redirect()->route('jobs.index')->with('success', 'Munka sikeresen létrehozva!');
+        } catch (\Exception $e) {
+            return redirect()->route('jobs.index')->with('error', 'Hiba történt a munka létrehozása során: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -84,6 +96,7 @@ class JobController extends Controller
      */
     public function update(Request $request, Job $job)
     {
+        //validáció
         $request->validate([
             'starting_address' => 'required|string|max:255',
             'destination_address' => 'required|string|max:255',
@@ -91,8 +104,14 @@ class JobController extends Controller
             'recipient_phone' => 'required|string|max:20',
             'driver_id' => 'required',
         ]);
-        $job->update($request->all());
-        return redirect()->route('jobs.index')->with('success', 'Munka sikeresen frissítve!');
+        try {
+            // Frissíti az összes mezőt, az nem baj, ha nem lett módosítva semmi
+            $job->update($request->all());
+
+            return redirect()->route('jobs.index')->with('success', 'Munka sikeresen frissítve!');
+        } catch (\Exception $e) {
+            return redirect()->route('jobs.index')->with('error', 'Hiba történt a munka frissítése során: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -100,7 +119,12 @@ class JobController extends Controller
      */
     public function destroy(Job $job)
     {
-        $job->delete();
-        return redirect()->route('jobs.index')->with('success', 'Munka sikeresen törölve!');
+        try {
+            // Törli a munkát, de nem soft delete-el
+            $job->delete();
+            return redirect()->route('jobs.index')->with('success', 'Munka sikeresen törölve!');
+        } catch (\Exception $e) {
+            return redirect()->route('jobs.index')->with('error', 'Hiba történt a munka törlésében: ' . $e->getMessage());
+        }
     }
 }

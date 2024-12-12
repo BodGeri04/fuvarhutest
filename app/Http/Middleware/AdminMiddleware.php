@@ -17,9 +17,9 @@ class AdminMiddleware
     {
         if (auth()->check() && auth()->user()->is_admin) {
             return $next($request);
+        } else {
+            abort(403, 'Hozzáférés megtagadva.');
         }
-        else {
-        abort(403, 'Hozzáférés megtagadva.'); // hibaoldal ut kell ide
-        }
+        //Ez az egész azért kell, hogy csak az admin tudjon hozzáférni bizonyos url-ekhez
     }
 }

@@ -43,7 +43,13 @@
                         <td> {{ $job->destination_address }} </td>
                         <td> {{ $job->recipient_name }} </td>
                         <td> {{ $job->recipient_phone }} </td>
-                        <td> {{ $job->status }} </td>
+                        @if ($job->status == 'Completed')
+                            <td style="color: green">{{ $job->status }}</td>
+                        @elseif($job->status == 'Failed')
+                            <td style="color: red">{{ $job->status }}</td>
+                        @else
+                            <td style="color: orange">{{ $job->status }}</td>
+                        @endif
                         <td> {{ $job->driver_id }} </td>
                         <td>
                             <a href="{{ route('jobs.edit', $job->id) }}" class="btn btn-primary">Módosítás</a>

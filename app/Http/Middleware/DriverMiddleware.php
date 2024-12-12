@@ -17,7 +17,8 @@ class DriverMiddleware
     {
         if (auth()->check() && auth()->user()->is_admin == 0) {
             return $next($request); // Ha nem admin, irány a fuvarozói munkák
+        } else {
+            abort(403, 'Hozzáférés megtagadva.');  // Ha nem fuvarozó (admin), abort
         }
-        return redirect()->route('login');  // Ha nem fuvarozó (admin), irányítsuk el másik oldalra
     }
 }

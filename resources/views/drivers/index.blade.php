@@ -2,6 +2,16 @@
 
 @section('content')
     <div class="container">
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+        @if (session('error'))
+            <div class="alert alert-error">
+                {{ session('error') }}
+            </div>
+        @endif
         <h1>Munkáim</h1>
 
         <table class="table">
@@ -22,7 +32,13 @@
                         <td>{{ $job->destination_address }}</td>
                         <td>{{ $job->recipient_name }}</td>
                         <td>{{ $job->recipient_phone }}</td>
-                        <td>{{ $job->status }}</td>
+                        @if ($job->status == 'Completed')
+                            <td style="color: green">{{ $job->status }}</td>
+                        @elseif($job->status == 'Failed')
+                            <td style="color: red">{{ $job->status }}</td>
+                        @else
+                            <td style="color: orange">{{ $job->status }}</td>
+                        @endif
                         <td>
                             <a href="{{ route('drivers.edit', $job->id) }}" class="btn btn-primary">Módosítás</a>
                         </td>
