@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Notifications\Notifiable;
 
-class Driver extends Model
+class Driver extends Authenticatable
 {
+    use HasFactory, Notifiable;
+    
     public function vehicle()
     {
         return $this->hasOne(Vehicle::class);
@@ -18,4 +22,16 @@ class Driver extends Model
     {
         return $this->is_admin;
     }
+
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'is_admin',
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 }
