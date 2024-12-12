@@ -38,7 +38,7 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'drivers',
         ],
     ],
 
@@ -58,18 +58,24 @@ return [
     | Supported: "database", "eloquent"
     |
     */
-
     'providers' => [
-        'users' => [
+        'drivers' => [ // Új provider "drivers" néven
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
+            'model' => App\Models\Driver::class, // A Driver modelre mutasson
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
     ],
+    
+    // 'providers' => [
+    //     'users' => [
+    //         'driver' => 'eloquent',
+    //         'model' => env('AUTH_MODEL', App\Models\User::class),
+    //     ],
+
+    //     'users' => [
+    //         'driver' => 'database',
+    //         'table' => 'users',
+    //     ],
+    // ],
 
     /*
     |--------------------------------------------------------------------------

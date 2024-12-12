@@ -19,6 +19,6 @@ class AdminMiddleware
             return $next($request);
         }
     
-        return redirect('/'); // hibaoldal ut kell ide
+        abort(403, 'Hozzáférés megtagadva.'); // hibaoldal ut kell ide
     }
 }

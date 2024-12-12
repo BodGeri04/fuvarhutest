@@ -1,14 +1,14 @@
 <?php
 
+use App\Http\Controllers\DriverController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Auth::routes();
 
-Route::group(['middleware' => 'admin'], function () {
-    Route::get('/admin/dashboard', [AdminController::class, 'index']);
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/drivers/create', [DriverController::class, 'create'])->name('drivers.create');
+    Route::post('/drivers', [DriverController::class, 'store'])->name('drivers.store');
 });
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
