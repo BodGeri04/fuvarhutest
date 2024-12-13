@@ -30,7 +30,7 @@
                     <th> Címzett neve </th>
                     <th> Címzett telefonszáma</th>
                     <th> Státusz </th>
-                    <th> Vezető ID </th>
+                    <th> Vezető Név </th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -50,7 +50,7 @@
                         @else
                             <td style="color: orange">{{ $job->status }}</td>
                         @endif
-                        <td> {{ $job->driver_id }} </td>
+                        <td>{{ optional($job->driver)->name ?? 'Nincs hozzárendelve' }}</td>
                         <td>
                             <a href="{{ route('jobs.edit', $job->id) }}" class="btn btn-primary">Módosítás</a>
                         </td>

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\JobFailedNotification;
 use App\Models\Driver;
 use App\Models\Job;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class JobController extends Controller
 {
@@ -14,7 +16,7 @@ class JobController extends Controller
     public function index(Request $request)
     {
         // Ha az admin kér egy státuszt, akkor szűrjük a munkákat
-        $query = Job::query();
+        $query = Job::with('driver'); // Eager loading a fuvarozókra
 
         if ($request->has('status') && in_array($request->status, ['assigned', 'in progress', 'completed', 'failed'])) {
             $query->where('status', $request->status);
@@ -104,9 +106,19 @@ class JobController extends Controller
             'recipient_phone' => 'required|string|max:20',
             'driver_id' => 'required',
         ]);
+
         try {
-            // Frissíti az összes mezőt, az nem baj, ha nem lett módosítva semmi
+            // Frissítjük az összes mezőt
             $job->update($request->all());
+
+            // Ellenőrizzük, hogy a státusz valóban "failed"
+            if ($job->status === 'failed') {
+                $admins = Driver::where('is_admin', true)->get();
+                foreach ($admins as $admin) {
+                    // Az adminoknak küldünk e-mailt
+                    Mail::to($admin->email)->send(new JobFailedNotification($job));
+                }
+            }
 
             return redirect()->route('jobs.index')->with('success', 'Munka sikeresen frissítve!');
         } catch (\Exception $e) {
