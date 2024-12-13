@@ -21,4 +21,5 @@ Ez a projekt egy fuvarozói rendszert valósít meg a Laravel 11.x keretrendszer
 
 A projekt tesztelése a Laravel beépített tesztelési funkcióival végezhető el.
 
+## Idő
 A projekt elkészítése nagyjából 8 órát vett igénybe.
